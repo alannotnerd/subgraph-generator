@@ -29,6 +29,7 @@ export function handle{{name}}(event: {{name}}): void {
 
   let entity = new {{../name}}{{name}}Entity(ID);
   entity.block = event.block.number;
+  entity.msgSender = event.transaction.from;
   entity.transactionHash = event.transaction.hash;
   {{#each fields}} 
     {{#if factory}}
