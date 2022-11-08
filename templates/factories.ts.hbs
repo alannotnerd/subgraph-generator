@@ -10,7 +10,7 @@ import {
 // {{name}}
   {{#each factories}}
 
-export const {{name}}__factory: F{{name}} = (params)  => (id: string) => {
+export const {{name}}__factory = (params)  => (id: string) => {
   const entity = new {{name}}(id);
     {{#each fields}}
       {{#if factory}}
