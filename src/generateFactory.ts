@@ -2,6 +2,7 @@ import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { AbiInput, AbiNode, Config, ContractEventDescription } from "./types";
 import Handlebars from "handlebars";
+import { capitalize } from "./utils";
 
 interface Context {
   contracts: {
@@ -24,7 +25,7 @@ const processEntities = (events: AbiNode[], contractName: string) => {
       return null;
     }
 
-    const baseName = `${prefix}_${input.name}`;
+    const baseName = `${prefix}${capitalize(input.name)}`;
     const fieldsFactories = input.components.map((i) =>
       processInput(i, baseName)
     );

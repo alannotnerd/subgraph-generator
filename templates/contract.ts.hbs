@@ -33,9 +33,13 @@ export function handle{{name}}(event: {{name}}): void {
   {{#each fields}} 
     {{#if factory}}
       {{#if isArray}}
-  entity.{{safeId name}} = event.params.{{name}}.map((e, idx) => {{factory}}(e)(ID + idx))
+  entity.{{safeId name}} = []
+  for(let i = 0; i < event.params.{{name}}.length; i++) {
+    const e = event.params.{{name}}[i];
+    entity.{{safeId name}}.push({{factory}}(e, ID+i.toString()))
+  }
       {{else}}
-  entity.{{safeId name}} = {{factory}}(event.params.{{name}})(ID)
+  entity.{{safeId name}} = {{factory}}(event.params.{{name}}, ID)
       {{/if}}
     {{else}}
   entity.{{safeId name}} = event.params.{{name}}

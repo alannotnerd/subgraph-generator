@@ -8,11 +8,20 @@ import generateAbi from "./generateAbi";
 import generateTsCode from "./generateTsCode";
 import generateFactory from "./generateFactory";
 import Handlebars from "handlebars";
+import { capitalize } from "./utils";
 Handlebars.registerHelper("safeId", function (context) {
   if (context === "id") {
     return "tid";
   }
   return context;
+});
+
+Handlebars.registerHelper("capitalize", function (context) {
+  return capitalize(context);
+});
+
+Handlebars.registerHelper("wrapStruct", function (context, contract) {
+  return context.slice(contract.length) + "Struct";
 });
 
 const config: Config = {

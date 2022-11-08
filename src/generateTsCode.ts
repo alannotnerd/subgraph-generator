@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { Config, ContractEventDescription } from "./types";
 import Handlebars from "handlebars";
+import { capitalize } from "./utils";
 
 interface Context {
   contracts: {
@@ -40,7 +41,9 @@ export default async (
                 name: input.name,
                 isArray: input.type.endsWith("[]"),
                 factory: input.components
-                  ? `${description.contractName}${event.name}_${input.name}__factory`
+                  ? `${description.contractName}${event.name}${capitalize(
+                      input.name
+                    )}__factory`
                   : null,
               };
             }),

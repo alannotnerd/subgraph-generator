@@ -7,17 +7,30 @@ import {
 } from "../generated/schema"
 
 {{#each contracts}}
+import {
+  {{#each factories}}
+  {{wrapStruct name ../name}},
+  {{/each}}
+} from "../generated/{{name}}/Contract"
+{{/each}}
+
+{{#each contracts}}
 // {{name}}
   {{#each factories}}
 
-export const {{name}}__factory = (params)  => (id: string) => {
+type F{{name}} = (params: {{wrapStruct name ../name}}, id: string) => string
+export const {{name}}__factory: F{{name}} = (params, id) => {
   const entity = new {{name}}(id);
     {{#each fields}}
       {{#if factory}}
         {{#if isArray}}
-  entity.{{safeId name}} = params.{{name}}.map((e, idx: number) => {{factory}}__factory(e)(id+idx));
+  entity.{{safeId name}} = []
+  for(let i = 0; i < params.{{name}}.length; i++) {
+    const e = params.{{name}}[i];
+    entity.{{safeId name}}.push({{factory}}__factory(e, id+i.toString()))
+  }
         {{else}}
-  entity.{{safeId name}} = {{factory}}__factory(params.{{name}})(id);
+  entity.{{safeId name}} = {{factory}}__factory(params.{{name}}, id);
         {{/if}}
       {{else}}
   entity.{{safeId name}} = params.{{name}};

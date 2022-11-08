@@ -2,6 +2,7 @@ import { readFile, writeFile } from "fs/promises";
 import Handlebars from "handlebars";
 import path from "path";
 import { AbiInput, AbiNode, Config, ContractEventDescription } from "./types";
+import { capitalize } from "./utils";
 
 interface Context {
   contracts: {
@@ -36,7 +37,7 @@ const processEntities = (events: AbiNode[], prefix: string): Entities => {
   const entities = [];
   const processField = (prefix: string) => (input: AbiInput) => {
     if ("components" in input) {
-      const typeName = `${prefix}_${input.name}`;
+      const typeName = `${prefix}${capitalize(input.name)}`;
       processEntity(input.components, typeName, false);
       if (input.type === "tuple[]") {
         return {
