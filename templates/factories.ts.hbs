@@ -1,0 +1,30 @@
+import {
+{{#each contracts}}
+  {{#each factories}}
+  {{name}},
+  {{/each}}
+{{/each}}
+} from "../generated/schema"
+
+{{#each contracts}}
+// {{name}}
+  {{#each factories}}
+
+export const {{name}}__factory: F{{name}} = (params)  => (id: string) => {
+  const entity = new {{name}}(id);
+    {{#each fields}}
+      {{#if factory}}
+        {{#if isArray}}
+  entity.{{safeId name}} = params.{{name}}.map((e, idx: number) => {{factory}}__factory(e)(id+idx));
+        {{else}}
+  entity.{{safeId name}} = {{factory}}__factory(params.{{name}})(id);
+        {{/if}}
+      {{else}}
+  entity.{{safeId name}} = params.{{name}};
+      {{/if}}
+    {{/each}}
+  entity.save();
+  return id;
+}
+  {{/each}}
+{{/each}}

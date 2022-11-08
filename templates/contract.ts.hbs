@@ -1,6 +1,22 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import * from "../generated/Contract/Contract";
-import * from "../generated/schema";
+import {
+{{#each events}}  
+  {{name}},
+{{/each}}
+} from "../generated/{{name}}/Contract";
+import {
+{{#each events}}
+  {{../name}}{{name}}Entity,
+{{/each}}
+} from "../generated/schema";
+import {
+{{#each events}}
+  {{#each fields}} 
+    {{#if factory}}
+  {{factory}},
+    {{/if}}
+  {{/each}}
+{{/each}}
+} from "./factories"
 import { log } from "@graphprotocol/graph-ts";
 
 {{#each events}}
@@ -15,7 +31,15 @@ export function handle{{name}}(event: {{name}}): void {
   entity.block = event.block.number;
   entity.transactionHash = event.transaction.hash;
   {{#each fields}} 
-    entity.{{name}} = event.params.{{name}}
+    {{#if factory}}
+      {{#if isArray}}
+  entity.{{safeId name}} = event.params.{{name}}.map((e, idx) => {{factory}}(e)(ID + idx))
+      {{else}}
+  entity.{{safeId name}} = {{factory}}(event.params.{{name}})(ID)
+      {{/if}}
+    {{else}}
+  entity.{{safeId name}} = event.params.{{name}}
+    {{/if}}
   {{/each}}
   entity.save();
 }

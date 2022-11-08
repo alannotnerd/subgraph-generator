@@ -19,10 +19,6 @@ interface Context {
 
 type Entities = Context["contracts"][0]["entities"];
 
-const capitalizeFirstLetter = (str: string) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
 const basicType = {
   address: "Bytes!",
   bytes: "Bytes!",
@@ -30,22 +26,22 @@ const basicType = {
   uint128: "BigInt!",
   uint64: "BigInt!",
   uint32: "Int!",
-  bytes32: "Int!",
   uint16: "Int!",
   uint8: "Int!",
   bool: "Boolean!",
+  bytes32: "Bytes!",
 };
 
 const processEntities = (events: AbiNode[], prefix: string): Entities => {
   const entities = [];
   const processField = (prefix: string) => (input: AbiInput) => {
     if ("components" in input) {
-      const typeName = `${prefix}${capitalizeFirstLetter(input.name)}`;
+      const typeName = `${prefix}_${input.name}`;
       processEntity(input.components, typeName, false);
       if (input.type === "tuple[]") {
         return {
           name: input.name,
-          type: "[" + typeName + "]",
+          type: "[" + typeName + "!]!",
         };
       } else {
         return {
@@ -65,7 +61,7 @@ const processEntities = (events: AbiNode[], prefix: string): Entities => {
     if (input.type.endsWith("[]") && input.type.slice(0, -2) in basicType) {
       return {
         name: input.name,
-        type: "[" + basicType[input.type] + "]",
+        type: "[" + basicType[input.type.slice(0, -2)] + "]!",
       };
     }
 
@@ -85,11 +81,7 @@ const processEntities = (events: AbiNode[], prefix: string): Entities => {
   };
 
   events.forEach((event) =>
-    processEntity(
-      event.inputs,
-      prefix + capitalizeFirstLetter(event.name),
-      true
-    )
+    processEntity(event.inputs, prefix + event.name, true)
   );
 
   return entities;

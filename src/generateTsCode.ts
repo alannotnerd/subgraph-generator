@@ -10,6 +10,8 @@ interface Context {
       name: string;
       fields: {
         name: string;
+        isArray: boolean;
+        factory?: string;
       }[];
     }[];
   }[];
@@ -36,6 +38,10 @@ export default async (
             fields: event.inputs.map((input) => {
               return {
                 name: input.name,
+                isArray: input.type.endsWith("[]"),
+                factory: input.components
+                  ? `${description.contractName}${event.name}_${input.name}__factory`
+                  : null,
               };
             }),
           };

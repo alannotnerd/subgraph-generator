@@ -2,16 +2,16 @@
 # {{name}}
   {{#each entities}}
     {{#if isEvent}}
-type {{name}}Entity @entity {
+type {{name}}Entity @entity(immutable: true) {
     {{else}}
-type {{name}} {
+type {{name}} @entity(immutable: true) {
     {{/if}}
   id: ID!
   block: BigInt!
   transactionHash: Bytes!
   msgSender: Bytes! #address
     {{#each fields}}
-  {{name}}:{{type}}
+  {{safeId name}}:{{type}}
     {{/each}}
 }
   {{/each}}

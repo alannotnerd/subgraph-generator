@@ -6,6 +6,14 @@ import generateGraphqlSchema from "./generateGraphqlSchema";
 import copyResources from "./copyResources";
 import generateAbi from "./generateAbi";
 import generateTsCode from "./generateTsCode";
+import generateFactory from "./generateFactory";
+import Handlebars from "handlebars";
+Handlebars.registerHelper("safeId", function (context) {
+  if (context === "id") {
+    return "tid";
+  }
+  return context;
+});
 
 const config: Config = {
   startBlock: 7648760,
@@ -33,6 +41,7 @@ const main = async () => {
     generateAbi(config, data),
     generateSubgraphManifest(config, data),
     generateGraphqlSchema(config, data),
+    generateFactory(config, data),
     generateTsCode(config, data),
     copyResources(config),
   ]);
