@@ -1,0 +1,18 @@
+{{#each contracts}}
+# {{name}}
+  {{#each entities}}
+    {{#if isEvent}}
+type {{name}}Entity @entity {
+    {{else}}
+type {{name}} {
+    {{/if}}
+  id: ID!
+  block: BigInt!
+  transactionHash: Bytes!
+  msgSender: Bytes! #address
+    {{#each fields}}
+  {{name}}:{{type}}
+    {{/each}}
+}
+  {{/each}}
+{{/each}}

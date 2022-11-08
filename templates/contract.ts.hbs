@@ -1,0 +1,22 @@
+import { BigInt } from "@graphprotocol/graph-ts";
+import * from "../generated/Contract/Contract";
+import * from "../generated/schema";
+import { log } from "@graphprotocol/graph-ts";
+
+{{#each events}}
+export function handle{{name}}(event: {{name}}): void {
+  const ID = `${event.transaction.hash.toHex()}-${event.transactionLogIndex.toString()}`;
+
+  if (!!{{../name}}{{name}}Entity.load(ID)) {
+    log.warning("Entity({}) exists!", [ID]);
+  }
+
+  let entity = new {{../name}}{{name}}Entity(ID);
+  entity.block = event.block.number;
+  entity.transactionHash = event.transaction.hash;
+  {{#each fields}} 
+    entity.{{name}} = event.params.{{name}}
+  {{/each}}
+  entity.save();
+}
+{{/each}}

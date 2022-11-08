@@ -1,0 +1,30 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+{{#each contracts}}
+  - kind: ethereum
+    name: {{name}}
+    network: goerli
+    source:
+      address: "{{address}}"
+      abi: Contract
+      startBlock: {{../startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+  {{#each events}}
+        - {{../name}}{{name}}Entity
+  {{/each}}
+      abis:
+        - name: Contract
+          file: ./abis/{{name}}.json
+      eventHandlers:
+  {{#each events}}
+        - event: {{sig}}
+          handler: handle{{name}}
+  {{/each}}
+      file: ./src/{{name}}.ts
+{{/each}}
