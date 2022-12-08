@@ -3,13 +3,14 @@
   {{#each entities}}
     {{#if isEvent}}
 type {{name}}Entity @entity(immutable: true) {
+  block: BigInt!
+  transactionHash: Bytes!
+  msgSender: Bytes! #address
+  msgValue: BigInt!
     {{else}}
 type {{name}} @entity(immutable: true) {
     {{/if}}
   id: ID!
-  block: BigInt!
-  transactionHash: Bytes!
-  msgSender: Bytes! #address
     {{#each fields}}
   {{safeId name}}:{{type}}
     {{/each}}

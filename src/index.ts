@@ -25,18 +25,23 @@ Handlebars.registerHelper("wrapStruct", function (context, contract) {
 });
 
 const config: Config = {
-  startBlock: 7648760,
+  startBlock: 7900000,
   outDir: "../generated-graph",
   contracts: [
     {
       name: "PoolCore",
-      address: "0xfE54AEF5540C40C8C9e0ad1bAFDbd64e334D101B",
-      path: "./data/PoolCore.ts",
+      address: "0xD496950582236b5E0DAE7fA13acc018492bE9c29",
+      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolCore__factory.ts",
     },
     {
       name: "PoolMarketplace",
-      address: "0x88888888888880C8C9e0ad1bAFDbd64e334D101B",
-      path: "./data/PoolMarketplace.ts",
+      address: "0xD496950582236b5E0DAE7fA13acc018492bE9c29",
+      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolMarketplace__factory.ts",
+    },
+    {
+      name: "PoolConfigurator",
+      address: "0xF8BA554C70f6dA7ac1699Ab35EE1C34C517eab56",
+      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolConfigurator__factory.ts",
     },
   ],
 };
