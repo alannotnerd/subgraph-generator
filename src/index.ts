@@ -9,6 +9,11 @@ import generateTsCode from "./generateTsCode";
 import generateFactory from "./generateFactory";
 import Handlebars from "handlebars";
 import { capitalize } from "./utils";
+import { program } from "commander";
+
+program
+  .option('--config <string>', 'Path to config file', "subgen.json")
+
 Handlebars.registerHelper("safeId", function (context) {
   if (context === "id") {
     return "tid";
@@ -24,29 +29,11 @@ Handlebars.registerHelper("wrapStruct", function (context, contract) {
   return context.slice(contract.length) + "Struct";
 });
 
-const config: Config = {
-  startBlock: 7900000,
-  outDir: "../generated-graph",
-  contracts: [
-    {
-      name: "PoolCore",
-      address: "0xD496950582236b5E0DAE7fA13acc018492bE9c29",
-      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolCore__factory.ts",
-    },
-    {
-      name: "PoolMarketplace",
-      address: "0xD496950582236b5E0DAE7fA13acc018492bE9c29",
-      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolMarketplace__factory.ts",
-    },
-    {
-      name: "PoolConfigurator",
-      address: "0xF8BA554C70f6dA7ac1699Ab35EE1C34C517eab56",
-      path: "/Users/alanwang/repo/para-space/paraspace-core/types/factories/protocol/pool/PoolConfigurator__factory.ts",
-    },
-  ],
-};
-
 const main = async () => {
+  program.parse()
+  const configRaw = await fs.readFile(program.opts()["config"]);
+  const config: Config = JSON.parse(configRaw.toString());
+
   await fs.mkdir(config.outDir, {
     recursive: true,
   });
