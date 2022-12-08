@@ -1,7 +1,13 @@
 {
   "name": "subgraph-generator",
   "version": "1.0.2",
-  "description": "",
+  "description": "Autogenerate subgraph for given contracts",
+  "author": "Alan WANG<alan1995wang@outlook.com>",
+  "homepage": "https://github.com/parallel-finance/subgraph-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parallel-finance/subgraph-generator"
+  },
   "main": "dist/index.js",
   "bin": {
     "subgen": "dist/index.js"
